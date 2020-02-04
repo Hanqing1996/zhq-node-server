@@ -1,46 +1,34 @@
-const express = require('express')
-const multer  = require('multer')
-const cors = require('cors')
-const upload = multer({ dest: 'uploads/' })
-const path = require('path')
+const express = require('express');
+const multer = require('multer');
+const cors = require('cors');
+const upload = multer({ dest: 'uploads/' });
 
-const app = express()
+const app = express();
 
-app.use(cors()) // 允许跨域
+app.get('/', (req, res) => {
+    res.send('hello nodejs');
+});
 
+app.options('/upload', cors());
+app.post('/upload', cors(), upload.single('uploadFile'), (req, res) => {
+    res.send(req.file.filename);
+});
 
-app.get('/',function (req,res) {
-    res.end('hello')
-})
-
-// 这里的 'file' 与 form.html 里的 'file' 对应
-app.post('/upload',  upload.single('uploadFile'), function (req, res, next) {
-
-    res.end(req.file.filename)
-})
-
-
-app.get('/download/:name', function (req, res, next) {
-    console.log(`服务器响应 download 时间：第${new Date().getMilliseconds()}毫秒`);
-    var options = {
-        root: path.join(__dirname, 'uploads'),
-        headers: {
-            'Content-Type': 'image/jpeg',
+app.get('/preview/:key', cors(), (req, res) => {
+    res.sendFile(
+        `uploads/${req.params.key}`,
+        {
+            root: __dirname,
+            headers: {
+                'Content-Type': 'image/jpeg',
+            },
+        },
+        error => {
+            console.log(error);
         }
-    }
+    );
+});
 
-    var fileName = req.params.name
-    res.sendFile(fileName, options, function (err) {
-        if (err) {
-            next(err)
-        } else {
-            console.log('Sent:', fileName)
-        }
-    })
-})
-
-// 从运行环境中获取端口号，PORT=5000 node index.js 则端口号为5000
-let port = process.env.PORT || 3000;
-app.listen(port, function () {
-    console.log(`Example app listening on port ${port}!`)
-})
+var port = process.env.PORT || 3000;
+console.log(port);
+app.listen(port);

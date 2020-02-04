@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<form action="https://zhq-node-server.herokuapp.com/upload" method="post" enctype="multipart/form-data">
+<form action="http://localhost:3000/upload" method="post">
     <input type="file" name="uploadFile">
     <button type="submit">上传</button>
 </form>
@@ -35,7 +35,7 @@
         xhr.onload=()=>{
             console.log(`我要获取的图片Id为：${xhr.response}`);
             let img=document.querySelector('img')
-            img.src=`http://localhost:3000/download/${xhr.response}`
+            img.src=`http://localhost:3000/preview/${xhr.response}`
             console.log(`img.src 设置完成时间：第${new Date().getMilliseconds()}毫秒`);
         }
     })
