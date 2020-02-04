@@ -34,7 +34,8 @@ app.get('/download/:name', function (req, res, next) {
     })
 })
 
-
-app.listen(3000, function () {
-    console.log('Example app listening on port 3000!')
+// 从运行环境中获取端口号，PORT=5000 node index.js 则端口号为5000
+let port = process.env.PORT || 3000;
+app.listen(port, function () {
+    console.log(`Example app listening on port ${port}!`)
 })
