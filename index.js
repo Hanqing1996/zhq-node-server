@@ -8,6 +8,11 @@ const app = express()
 
 app.use(cors()) // 允许跨域
 
+
+app.get('/',function (req,res) {
+    res.end('hello')
+})
+
 // 这里的 'file' 与 form.html 里的 'file' 对应
 app.post('/upload',  upload.single('uploadFile'), function (req, res, next) {
 
